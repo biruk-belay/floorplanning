@@ -73,25 +73,35 @@ The resource distribution on the x and y coordinates can be described as \\
 					  \hspace{48mm} h.(x-3) \hspace{10mm} 13$<$x$<$15
 					  
 					  \hspace{48mm} h.(x-4) \hspace{10mm} 17$<$x$<$29
+					  
+\hspace{15mm} where \[h\in \{0, H-1 \}  \quad and \quad x\in \{0, W-1 \} \] \\
 
-\hspace{15mm} where \[h\in \{0, H-1 \}  \quad and \quad x\in \{0, W-1 \} \]
+\hspace{15mm} (\textbf{to be included}: the position of the forbidden regions which are going to be used to formulate constraints) \\
 
-The constraints used to generate the slot positions are
+The PR constraints used to generate the slot positions are
 \begin{itemize}
 \item there must be enough resources within the slots
+\item Only one reconfigurable partition within a frame
 \item there should be no common tiles between slots (no interference)
+\item forbidden regions must not be included in the slots
+\item Left and right edges must be placed in proper positions
 \item the amount of wasted resources should be minimized (Wasting DSPs is more expensive than BRAMs which in turn is more expensive than CLBs)
 \item Other optimizations such as lower wire length between slots or lower length to I/O etc... can be added as constraints
 \end{itemize}
 
 \textbf{constraint 1}: This is fairly straight forward and needs no further elaboration \\
-\textbf{Constraint 2}: This is also fairly straight forward and can be stated as two slots S$_1$ \{x$_1$, y$_1$, w$_1$, h$_1$\} and S$_2$\{ x$_2$, y$_2$, w$_2$, h$_2$ \} do not interfere if \\
+\textbf{constraint 2}: A frame is the smallest reconfigurable physical region and it is aligned with the boundaries of the clock regions. A Reconfigurable Frame cannot contain logic from more than one Reconfigurable Partition.  \\  
+\textbf{Constraint 3}: This is also fairly straight forward and can be stated as two slots S$_1$ \{x$_1$, y$_1$, w$_1$, h$_1$\} and S$_2$\{ x$_2$, y$_2$, w$_2$, h$_2$ \} do not interfere if \\
 
 \hspace{15mm}  x$_1$ + w$_1$ $<$ x$_2$ or y$_1$ + h$_1$ $<$ y$_2$ : (x$_1$ $<$ x$_2$ and y$_1$ $<$ y$_2$) \\
 
-\textbf{constraint 3}: This constraint has two parts. The first part states that the slots must be the smallest possible rectangles which must also contain the required resources. The second part of the constraint states that the number of wasted resources should be kept to the minimum. Resources are considered wasted if they are included in a slot while not being used. All FPGA resources are not equally valuable. This means it is better to waste CLBs than BRAMs than DSPs. Hence there should also be some kind of constraint to state the maximum amount of resources that can be wasted in search of an optimal slot. This constraint must also force the optimizer to start searching for slots from the columns of the most expensive resources. \\
+\textbf{constraint 4}: Global resources, clock resources (BUFG, BUFR, MMCM etc...), static components (BSCAN, XADC etc...) must not be included in the rectangles. The FPGA resource description must also include these components to avoid including them in the rectangles
 
-\textbf{constraint 4}: Other constraints such as minimal wire length between slots (to reduce routing delay and power consumption) can be used as constraints to choose the optimal slots \\
+\textbf{constraint 5}: The left and right edges of the rectangles must be placed between CLB-CLB, CLB-BRAM or CLB-DSP and not between two interconnect columns (INT-INT).
+
+\textbf{constraint 6}: This constraint has two parts. The first part states that the slots must be the smallest possible rectangles which must also contain the required resources. The second part of the constraint states that the number of wasted resources should be kept to the minimum. Resources are considered wasted if they are included in a slot while not being used. All FPGA resources are not equally valuable. This means it is better to waste CLBs than BRAMs than DSPs. Hence there should also be some kind of constraint to state the maximum amount of resources that can be wasted in search of an optimal slot. This constraint must also force the optimizer to start searching for slots from the columns of the most expensive resources. \\
+
+\textbf{constraint 7}: Other constraints such as minimal wire length between slots (to reduce routing delay and power consumption) can be used as constraints to choose the optimal slots \\
  
 Previous approaches of solving the floorplanning problem by other authors mostly involve two steps. First, all the possible slots are enumerated. This is done by starting a scan on the fpga fabric from the bottom left corner and lisitng all the possible rectangles which will contain all the necessary resources for the respective slots. Then some sort of heuristics/optimization is applied to choose the best ones from the set of possible slots.\\
 Our approach instead focuses on using a mathemathical techniques to generate the slots first hand (without enumerating all possible slots) by using the proper constraints. 
