@@ -50,45 +50,80 @@ A slot is represented using 4 parameters i.e. the two bottom left coordinates an
 Consider the resource layout in one of the quadrants of xc7z015 FPGA in the picture below
 \includegraphics[width=\textwidth, height=8cm]{graphics/fpga_1.png} \\ \\
 
-The resource distribution on the x and y coordinates can be described as \\
+The number of BRAMs on the x axis of the FPGA fabric is expressed as 
 
-\hspace{15mm} \#BRAM \hspace{15mm} h.0 \hspace{10mm}  0$<$x$<$4 
-   
-   					  \hspace{48mm} h.1 \hspace{10mm}  4$\leq$x$<$18
-   					  
-   					  \hspace{48mm} h.2 \hspace{10mm}  18$\leq$x$<$25
-   					  
-   					  \hspace{48mm} h.2 \hspace{10mm}  25$\leq$x$<$W  \\
-   					  
+\begin{equation}
+A(x) = \begin{cases}
+0, & \textbf{0$<$x$<$4}, \\
+1, & \textbf{4$\leq$x$<$18}, \\
+2, & \textbf{18$\leq$x$<$25}, \\
+3, & \textbf{25$\leq$x$<$W},
+\end{cases}
+\end{equation}
 
-\hspace{15mm} \#DSP  \hspace{20mm} h.0 \hspace{10mm}  0$<$x$<$7
+meanwhile the number of BRAMs on the y axis equals 
+\begin{equation}
+B(y) = \begin{cases} 
+y\%5, & \textbf{0$\leq$y$<$H},
+\end{cases}
+\end{equation}
 
-					  \hspace{49mm} h.1 \hspace{10mm}  7$\leq$x$<$22
-					  
-					  \hspace{49mm} h.2 \hspace{10mm} 22$\leq$x$<$W   \\
-					  
+The total number of BRAMs on the FPGA then equals to \\
+\begin{equation}
+BRAM(x,y) =  A(x) * B(y)
+\end{equation}
 
-\hspace{15mm} \#CLB  \hspace{20mm} h.x \hspace{15mm}     0$<$x$<$4
-					  				  
-					  \hspace{48mm} h.(x-1) \hspace{10mm} 4$\leq$x$<$7
-					  
-					  \hspace{48mm} h.(x-2) \hspace{10mm} 7$\leq$x$<$10
-					  
-					  \hspace{48mm} h.(x-3) \hspace{10mm} 10$\leq$x$<$15
-					  
-					  \hspace{48mm} h.(x-4) \hspace{10mm} 15$\leq$x$<$18
-					  
-					  \hspace{48mm} h.(x-5) \hspace{10mm} 18$\leq$x$<$22
-					  
-					  \hspace{48mm} h.(x-6) \hspace{10mm} 22$\leq$x$<$25
-					  
-					  \hspace{48mm} h.(x-7) \hspace{10mm} 25$\leq$x$<$W
-					  
-\hspace{15mm} \#static \hspace{48mm} h.x    \hspace{10mm} x = 10 and 15		  
-					  
-\hspace{15mm} where \[h\in \{0, H-1 \}  \quad and \quad x\in \{0, W-1 \} \] \\
+The number of DSPs on the x axis of the FPGA fabric is expressed as 
+\begin{equation}
+C(x) = \begin{cases}
+0, & \textbf{0$<$x$<$7}, \\
+1, & \textbf{7$\leq$x$<$22}, \\
+2, & \textbf{22$\leq$x$<$W},
+\end{cases}
+\end{equation}
 
-The total number of resources in a slot S(x, y, w, h) = (f(x+w, y+h) - f(x,y)) + (g(x+w, y+h) - g(x,y)) + (k(x+w, y+h) - k(x,y)) where f(x,y), g(x,y) and k(x,y) represent the number CLBs, DSP and BRAM from the bottom left point to (x,y) coordinate on the fpga fabric.
+meanwhile the number of DSPs on the y axis equals 
+\begin{equation}
+D(y) = \begin{cases} 
+y\%5, & \textbf{0$\leq$y$<$H},
+\end{cases}
+\end{equation}
+
+The total number of DSPs on the FPGA then equals to \\
+\begin{equation}
+DSP(x,y) =  C(x) * D(y)
+\end{equation}					  
+
+
+The number of CLB on the x axis is expressed 					  
+\begin{equation}
+F(x) = \begin{cases}
+x, & \textbf{ 0$<$x$<$4}, \\
+(x-1), & \textbf{4$\leq$x$<$7}, \\
+(x-2), & \textbf{7$\leq$x$<$10}, \\
+(x-3), & \textbf{10$\leq$x$<$15}, \\
+(x-4), & \textbf{15$\leq$x$<$18}, \\
+(x-5), & \textbf{18$\leq$x$<$22}, \\
+(x-6), & \textbf{22$\leq$x$<$25}, \\
+(x-7), & \textbf{25$\leq$x$<$W},
+\end{cases}
+\end{equation}
+
+The number of CLB on the y axis is expressed as 
+\begin{equation}
+G(y) =  \begin{cases}
+y, & \textbf{0$\leq$y$<$H}
+\end{cases}
+\end{equation}
+
+The total number of CLBs on the FPGA then equals to \\
+\begin{equation}
+CLB(x,y) =  F(x) * G(y)
+\end{equation}					  
+					  
+\hspace{15mm} where \[y\in \{0, H-1 \}  \quad and \quad x\in \{0, W-1 \} \] \\
+
+The total number of resources in a slot S(x, y, w, h) = (f(x+w, y+h) - f(x,y)) + (g(x+w, y+h) - g(x,y)) + (k(x+w, y+h) - k(x,y)) where f(x,y), g(x,y) and k(x,y) represent the number CLBs, DSP and BRAM at (x,y) starting from the bottom left point i.e. (0,0) on the coordinate system of the fpga fabric.
 
 \hspace{15mm} (\textbf{to be included}: the position of the forbidden regions which are going to be used to formulate constraints) \\
 
