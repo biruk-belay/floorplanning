@@ -123,9 +123,14 @@ CLB(x,y) =  F(x) * G(y)
 					  
 \hspace{15mm} where \[y\in \{0, H-1 \}  \quad and \quad x\in \{0, W-1 \} \] \\
 
-The total number of resources in a slot S(x, y, w, h) = (f(x+w, y+h) - f(x,y)) + (g(x+w, y+h) - g(x,y)) + (k(x+w, y+h) - k(x,y)) where f(x,y), g(x,y) and k(x,y) represent the number CLBs, DSP and BRAM at (x,y) starting from the bottom left point i.e. (0,0) on the coordinate system of the fpga fabric.
-
-\hspace{15mm} (\textbf{to be included}: the position of the forbidden regions which are going to be used to formulate constraints) \\
+The total number of resources in a slot is 
+\begin{equation}
+\begin{split}
+S(x, y, w, h) = (CLB(x+w,\quad y+h) - CLB(x,y)) + \\ 
+(DSP(x+w, \quad y+h) - DSP(x,y))  + \\ (BRAM(x+w,\quad y+h) - BRAM(x,y))
+\end{split}
+\end{equation} \\
+where CLB(x,y), DSP(x,y) and BRAM(x,y) represent the number CLBs, DSP and BRAM at (x,y) starting from the bottom left point i.e. (0,0) on the coordinate system of the fpga fabric.
 
 The PR constraints used to generate the slot positions are
 \begin{itemize}
