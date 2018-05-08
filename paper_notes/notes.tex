@@ -60,7 +60,7 @@ The number of BRAMs on the x axis of the FPGA fabric is expressed as
 
 \begin{equation}
 A(x) = \begin{cases}
-0, & \textbf{0$<$x$<$4}, \\
+0, & \textbf{0$\leq$x$<$4}, \\
 1, & \textbf{4$\leq$x$<$18}, \\
 2, & \textbf{18$\leq$x$<$25}, \\
 3, & \textbf{25$\leq$x$<$W},
@@ -82,7 +82,7 @@ BRAM(x_i,y_i,w_i,h_i) =  (A(x_i+w_i) - A(x_i)) \cdot (B(y_i+h_i) - B(y_i))
 The number of DSPs on the x axis of the FPGA fabric is expressed as 
 \begin{equation}
 C(x) = \begin{cases}
-0, & \textbf{0$<$x$<$7}, \\
+0, & \textbf{0$\leq$x$<$7}, \\
 1, & \textbf{7$\leq$x$<$22}, \\
 2, & \textbf{22$\leq$x$<$W},
 \end{cases}
@@ -104,7 +104,7 @@ DSP(x_i,y_i,w_i,h_i) =  (C(x_i+w_i) - C(x_i)) \cdot (D(y_i+h_i) - D(y_i))
 The number of CLB on the x axis is expressed 					  
 \begin{equation}
 F(x) = \begin{cases}
-x, & \textbf{ 0$<$x$<$4}, \\
+x, & \textbf{ 0$\leq$x$<$4}, \\
 (x-1), & \textbf{4$\leq$x$<$7}, \\
 (x-2), & \textbf{7$\leq$x$<$10}, \\
 (x-3), & \textbf{10$\leq$x$<$15}, \\
@@ -202,7 +202,7 @@ Therefore for N slots on an FPGA it can be said that slot S$_i$ faces no interfe
 \sum_{k=1}^{N-1} \Delta_{ik} = 0
 \end{equation}  
  
-\textbf{constraint 3}: Global resources, clock resources (central clock column, BUFG, BUFR, MMCM etc...), static components (BSCAN, ICAP, XADC etc...) must not be included in the rectangles. The $\rho$ and $\nu$ vectors which contain the x and y coordinates of these resources on the FPGA fabric. These resources are not included in a slot S$_i$ if 
+\textbf{constraint 3}: Global resources, clock resources (central clock column, BUFG, BUFR, MMCM etc...), static components (BSCAN, ICAP, XADC etc...) must not be included in the rectangles. The $\rho$ and $\nu$ vectors contain the x and y coordinates of these resources on the FPGA fabric. These resources are not included in a slot S$_i$ if 
 \begin{equation}
 \begin{split}
 (x_i, x_i+w_i) \notin \rho \\
